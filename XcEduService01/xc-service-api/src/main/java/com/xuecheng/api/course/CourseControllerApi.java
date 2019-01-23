@@ -1,15 +1,18 @@
 package com.xuecheng.api.course;
 
+import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
+import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value="配置管理课程",description = "课程配置管理接口，提供数据模型的管理、查询课程")
+@Api(value = "课程管理",description = "课程管理",tags = {"课程管理"})
 public interface CourseControllerApi {
 
     @ApiOperation("查询课程计划")
@@ -28,6 +31,22 @@ public interface CourseControllerApi {
             int size,
             CourseListRequest courseListRequest
     );
+
+    @ApiOperation("添加课程基础信息")
+    public AddCourseResult addCourseBase(CourseBase courseBase);
+
+    @ApiOperation("获取课程基础信息")
+    public CourseBase getCourseBaseById(String courseId) throws RuntimeException;
+
+    @ApiOperation("更新课程基础信息")
+    public ResponseResult updateCourseBase(CourseBase courseBase);
+
+    @ApiOperation("获取课程营销信息")
+    public CourseMarket getCourseMarketById(String courseId);
+
+    @ApiOperation("更新课程营销信息")
+    public ResponseResult updateCourseMarket(CourseMarket courseMarket);
+
 
 
 }
