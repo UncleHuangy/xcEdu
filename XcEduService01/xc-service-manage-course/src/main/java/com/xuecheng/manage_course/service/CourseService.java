@@ -4,16 +4,15 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
+import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.*;
-import com.xuecheng.manage_course.dao.CourseBaseRepository;
-import com.xuecheng.manage_course.dao.CourseMapper;
-import com.xuecheng.manage_course.dao.TeachplanMapper;
-import com.xuecheng.manage_course.dao.TeachplanRepository;
+import com.xuecheng.manage_course.dao.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,17 +24,55 @@ import java.util.Optional;
 @Service
 public class CourseService {
 
+    //课程计划
     @Autowired
     private TeachplanMapper mapper;
 
+    //课程列表
     @Autowired
     private CourseMapper courseMapper;
 
+    //课程基本信息
     @Autowired
     private CourseBaseRepository courseBaseRepository;
 
+    //课程计划
     @Autowired
     private TeachplanRepository teachplanRepository;
+
+    //课程营销计划
+    @Autowired
+    private CourseMarketRepository courseMarketRepository;
+
+
+    //查询课程营销计划
+    public CourseMarket getCourseMarketById(String courseid){
+        Optional<CourseMarket> byId = courseMarketRepository.findById(courseid);
+        if (!byId.isPresent()){
+            return null;
+        }
+        return byId.get();
+    }
+
+    //添加修改课程营销计划
+    public CourseMarket updateCourseMarket(CourseMarket courseMarket){
+
+        CourseMarket save = courseMarketRepository.save(courseMarket);
+        return save;
+    }
+
+
+    //新增课程
+    public AddCourseResult addCourseBase(CourseBase courseBase){
+
+        //课程状态默认为发布
+        courseBase.setStatus("1");
+        courseBaseRepository.save(courseBase);
+
+        return new AddCourseResult(CommonCode.SUCCESS,courseBase.getId());
+    }
+
+
 
 
     //查询课程计划
@@ -151,6 +188,20 @@ public class CourseService {
     }
 
 
+    //根据课程id查询信息
+    public CourseBase getCourseBaseById(String courseId) {
+        Optional<CourseBase> byId = courseBaseRepository.findById(courseId);
+        if (!byId.isPresent()){
+            ExceptionCast.cast(CommonCode.FAIL);
+        }
 
+        return byId.get();
+    }
 
+    //修改课程基本信息
+    public ResponseResult updateCourseBase(CourseBase courseBase) {
+        CourseBase save = courseBaseRepository.save(courseBase);
+
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
 }

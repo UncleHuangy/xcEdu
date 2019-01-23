@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: xc-service-manage-course
+  data:
+    mongodb:
+      uri:  mongodb://root:123@localhost:27017
+      database: xc_cms
   datasource:
     druid:
       url: jdbc:mysql://localhost:3306/xc_course?characterEncoding=utf-8
